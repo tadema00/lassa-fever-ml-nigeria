@@ -156,16 +156,12 @@ print("="*70)
 # ── Only accept a pre-merged file if it actually contains a 'cases' column ──
 MERGED_CANDIDATES = [
     "/content/results/Lassa_Final_Merged_Dataset.csv",
-    "results/Lassa_Final_Merged_Dataset.csv",
-    "Lassa_Final_Merged_Dataset.csv",
 ]
 FEATURES_CANDIDATES = [
     "/content/Lassa_climate_features_engineered.csv",
-    "Lassa_climate_features_engineered.csv",
 ]
 CASES_CANDIDATES = [
     "/content/Cases_rainfal_data.csv",
-    "Cases_rainfal_data.csv",
 ]
 
 df = None
