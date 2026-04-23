@@ -1,0 +1,17 @@
+name: lassa-ml
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas>=1.5
+  - numpy>=1.23
+  - matplotlib>=3.6
+  - seaborn>=0.12
+  - scikit-learn>=1.2
+  - statsmodels>=0.14
+  - scipy>=1.10
+  - pip
+  - pip:
+    - shap>=0.43
+    - lightgbm>=4.0
