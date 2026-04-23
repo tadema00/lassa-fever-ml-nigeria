@@ -1,0 +1,237 @@
+# Predicting Lassa Fever Outbreaks Across Distinct Ecological Zones in Nigeria
+## An 8-Year Spatiotemporal Analysis Using Machine Learning and Time-Lagged Climate Drivers (2018–2025)
+
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![DOI](https://img.shields.io/badge/DOI-pending-orange.svg)](#citation)
+
+---
+
+## 📄 Associated Manuscript
+
+> **[Title]** Predicting Lassa Fever Outbreaks Across Distinct Ecological Zones in Nigeria:
+> An 8-Year Spatiotemporal Analysis Using Machine Learning and Time-Lagged Climate Drivers (2018–2025)
+>
+> **Authors:** Ayokunle John Tadema
+>
+> **Journal:** [Journal Name] | **Status:** Under Review
+>
+> **Manuscript DOI / Preprint:** ` `
+
+This repository contains all analysis code, figure-generation scripts, and result tables that directly support the findings reported in the manuscript. Every figure and table in the paper can be reproduced by running the pipeline described below.
+
+---
+
+## 📁 Repository Structure
+
+```
+lassa-fever-ml-nigeria/
+│
+├── src/
+│   ├── 01_data_integration.py        # Section 1–2:  Data loading, merging & lag imputation
+│   ├── 02_descriptive_stats.py       # Section 3:    Descriptive statistics & climate summary
+│   ├── 03_exploratory_figures.py     # Section 4–5:  Epidemic curves, trends, STL decomposition
+│   ├── 04_correlation_analysis.py    # Section 6:    Spearman lagged cross-correlation
+│   ├── 05_glm_regression.py          # Section 7:    Negative binomial GLM + IRR forest plot
+│   ├── 06_ml_models.py               # Section 8:    Random Forest + LightGBM modelling
+│   ├── 07_shap_analysis.py           # Section 9:    SHAP interpretability analysis
+│   ├── 08_uncertainty.py             # Section 10:   Bootstrap confidence intervals
+│   ├── 09_granger_causality.py       # Section 11:   Granger causality tests
+│   ├── 10_sarima_baseline.py         # Section 12:   SARIMA baseline model
+│   ├── 11_outbreak_detection.py      # Section 13:   Early warning system
+│   ├── 12_tables_export.py           # Section 14:   Manuscript tables
+│   ├── 13_elevation_sensitivity.py   # Section 15:   Elevation sensitivity analysis
+│   └── utils.py                      # Shared helpers: metrics, colours, savefig
+│
+├── lassa_analysis_complete.py        # ← Single-file pipeline (run this for full reproduction)
+│
+├── notebooks/
+│   └── exploratory_analysis.ipynb   # Interactive Jupyter/Colab notebook version
+│
+├── data/
+│   ├── README_data.md               # Data sources, variables, access instructions
+│   ├── Lassa_climate_features_engineered.csv   # [NOT INCLUDED — see data/README_data.md]
+│   └── Cases_rainfal_data.csv                  # [NOT INCLUDED — see data/README_data.md]
+│
+├── figures/                         # All generated figures (300 DPI PNG)
+│   └── [auto-generated on run]
+│
+├── results/                         # All generated tables (CSV)
+│   └── [auto-generated on run]
+│
+├── requirements.txt                 # Python package dependencies
+├── environment.yml                  # Conda environment specification
+├── LICENSE                          # MIT License
+└── README.md                        # This file
+```
+
+---
+
+## 🚀 Quick Start
+
+### Option 1 — Google Colab (Recommended)
+
+Click the badge below to open the full pipeline in Google Colab:
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tadema00/lassa-fever-ml-nigeria/blob/main/notebooks/exploratory_analysis.ipynb)
+
+Then upload your two data files when prompted:
+- `Lassa_climate_features_engineered.csv`
+- `Cases_rainfal_data.csv`
+
+### Option 2 — Local Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/tadema00/lassa-fever-ml-nigeria.git
+cd lassa-fever-ml-nigeria
+
+# 2. Create and activate environment
+conda env create -f environment.yml
+conda activate lassa-ml
+
+# OR with pip
+pip install -r requirements.txt
+
+# 3. Place your data files in the data/ folder
+cp /path/to/Lassa_climate_features_engineered.csv data/
+cp /path/to/Cases_rainfal_data.csv data/
+
+# 4. Run the full pipeline
+python lassa_analysis_complete.py
+```
+
+All figures will be saved to `figures/` and all tables to `results/`.
+
+---
+
+## 📊 Analysis Pipeline Overview
+
+| Section | Script | Description | Outputs |
+|---------|--------|-------------|---------|
+| 1–2 | `01_data_integration.py` | Load, merge & impute lag features | `Lassa_Final_Merged_Dataset.csv` |
+| 3 | `02_descriptive_stats.py` | Case burden & climate summaries | Table 1 |
+| 4–5 | `03_exploratory_figures.py` | Epidemic curves, heatmaps, STL | Figs 1–6 |
+| 6 | `04_correlation_analysis.py` | Spearman lag–response analysis | Figs 7–8, Table 2 |
+| 7 | `05_glm_regression.py` | Negative binomial GLM, IRR forest plot | Fig 9, Table NB |
+| 8 | `06_ml_models.py` | RF + LightGBM, 5-fold time-series CV | Figs 10–11, Table 3 |
+| 9 | `07_shap_analysis.py` | Global & state-stratified SHAP, PDP, waterfall | Figs 12a–12f |
+| 10 | `08_uncertainty.py` | Bootstrap 95% CI (B=500) | Fig 13, Table 4 |
+| 11 | `09_granger_causality.py` | Granger temporal precedence tests | Fig 14, Table 5 |
+| 12 | `10_sarima_baseline.py` | SARIMA AIC grid search, RF vs SARIMA | Figs 15–16, Table 6 |
+| 13 | `11_outbreak_detection.py` | Rolling early warning system | Fig 17, Table 7 |
+| 14 | `12_tables_export.py` | Consolidated manuscript tables | Table 8 |
+| 15 | `13_elevation_sensitivity.py` | Elevation as geographic proxy — sensitivity | Fig 18 |
+
+---
+
+## 📦 Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `pandas` | ≥1.5 | Data manipulation |
+| `numpy` | ≥1.23 | Numerical computation |
+| `matplotlib` | ≥3.6 | Figure generation |
+| `seaborn` | ≥0.12 | Statistical visualisation |
+| `scikit-learn` | ≥1.2 | Random Forest, metrics, CV |
+| `statsmodels` | ≥0.14 | SARIMA, NB GLM, STL, Granger |
+| `scipy` | ≥1.10 | Spearman correlation, statistics |
+| `shap` | ≥0.43 | SHAP interpretability |
+| `lightgbm` | ≥4.0 | Gradient boosting (optional) |
+
+Install all at once:
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn statsmodels scipy shap lightgbm
+```
+
+---
+
+## 🗃️ Data
+
+The raw data files are **not included** in this repository due to data sharing agreements. Please refer to [`data/README_data.md`](data/README_data.md) for:
+- Full variable descriptions and units
+- Data sources and access links
+- Instructions for replicating the merged dataset
+
+The merged dataset (`Lassa_Final_Merged_Dataset.csv`) is generated automatically by running the pipeline with the two source files.
+
+---
+
+## 📈 Key Findings
+
+- **Soil moisture** and **relative humidity** are the strongest negative predictors of Lassa fever incidence across all six states (Spearman ρ = −0.50 to −0.64)
+- A **1–2 week lag** is the optimal forecast window for early warning across all states
+- **Taraba** shows the strongest soil moisture signal (ρ = −0.637, p < 10⁻⁴⁷)
+- **Random Forest** outperforms the SARIMA climate-naïve baseline in 4 of 6 states, demonstrating the value added by climate predictors
+- All Granger causality tests confirm temporal precedence of climate variables over case counts (p < 0.05)
+
+---
+
+## 🗂️ Generated Outputs
+
+### Figures (saved to `figures/`)
+```
+Fig1_Epidemic_Curves.png              Fig10_Model_Performance_Dashboard.png
+Fig2_Annual_Trends.png                Fig11_Predicted_vs_Observed.png
+Fig3_Seasonal_Heatmap.png             Fig12a_SHAP_Beeswarm_Global.png
+Fig4_Ecological_Zones.png             Fig12b_SHAP_Bar_Global.png
+Fig5_Seasonal_Analysis.png            Fig12c_SHAP_State_Stratified.png
+Fig6_STL_Decomposition.png            Fig12d_SHAP_Partial_Dependence.png
+Fig7_Lag_Response_Heatmap.png         Fig12e_SHAP_Waterfall_Peak_Week.png
+Fig8_Spatial_Correlation_Chart.png    Fig12f_RF_Feature_Importance.png
+Fig9_Forest_Plot_GLM.png              Fig13_Bootstrap_Prediction_Intervals.png
+Fig14_Granger_Causality.png           Fig16_SARIMA_vs_RF_Comparison.png
+Fig15_SARIMA_Forecasts.png            Fig17_Outbreak_Detection.png
+Fig18_Elevation_Sensitivity.png
+```
+
+### Tables (saved to `results/`)
+```
+Table1_Descriptive_Stats.csv          Table6_SARIMA_vs_RF.csv
+Table2_Spearman_Lag_Results.csv       Table7_Outbreak_Alerts.csv
+Table2b_Best_Lag_Summary.csv          Table8_Consolidated_Summary.csv
+Table3_Model_Performance.csv          Table_NB_Regression.csv
+Table4_Bootstrap_CI.csv               Table_SHAP_Global_Importance.csv
+Table5_Granger_Causality.csv          Table_SHAP_State_Stratified.csv
+                                       Table_Elevation_Sensitivity.csv
+```
+
+---
+
+## 📝 Citation
+
+If you use this code or data in your research, please cite:
+
+```bibtex
+@article{Tadema2026,
+  title   = {Predicting Lassa Fever Outbreaks Across Distinct Ecological Zones
+             in Nigeria: An 8-Year Spatiotemporal Analysis Using Machine Learning
+             and Time-Lagged Climate Drivers (2018--2025)},
+  author  = {Ayokunle John Tadema},
+  journal = {[Journal Name]},
+  year    = {2025},
+  doi     = {[INSERT DOI]},
+  url     = {[INSERT URL]}
+}
+```
+
+---
+
+## 🤝 Contributing
+
+Bug reports and suggestions are welcome via [GitHub Issues](https://github.com/tadema00/lassa-fever-ml-nigeria/issues).
+
+---
+
+## 📃 License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 📬 Contact
+
+**Corresponding Author:** [Tadema Ayokunle John]
+**Email:** [tademaaj@mcu.edu.ng]
+**ORCID:** [https://orcid.org/XXXX-XXXX-XXXX-XXXX]
+**Institution:** [Your Institution]
